@@ -69,7 +69,6 @@ if (isPreviewPage) {
             history.pop();
             const lastState = JSON.parse(history[history.length - 1]);
             
-            // Remove elements that don't exist in the restored state
             document.querySelectorAll('.interactive-element').forEach(el => {
                 if (!lastState.elements.find(item => item.id === el.id)) {
                     el.remove();
@@ -78,7 +77,6 @@ if (isPreviewPage) {
 
             lastState.elements.forEach(item => {
                 let el = document.getElementById(item.id);
-                // If element doesn't exist, create it (for added textboxes)
                 if (!el) {
                     el = document.createElement('div');
                     el.id = item.id;
@@ -104,25 +102,20 @@ if (isPreviewPage) {
         };
 
         const changeFontSize = (direction) => {
-            const selection = window.getSelection();
-            if (!selection.rangeCount || selection.isCollapsed) return;
-        
-            const range = selection.getRangeAt(0);
-            const parentElement = range.commonAncestorContainer.nodeType === 1 ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
-            const currentSize = parseFloat(window.getComputedStyle(parentElement).fontSize);
-            const newSize = direction === 'increase' ? currentSize + 1 : Math.max(1, currentSize - 1);
-        
             document.execCommand("fontSize", false, "7");
             const fontElements = document.getElementsByTagName("font");
             for (let i = 0, len = fontElements.length; i < len; ++i) {
                 if (fontElements[i].size == "7") {
+                    const parent = fontElements[i].parentElement;
+                    const currentSize = parseFloat(window.getComputedStyle(parent).fontSize);
+                    const newSize = direction === 'increase' ? currentSize + 1 : Math.max(8, currentSize - 1);
                     fontElements[i].removeAttribute("size");
                     fontElements[i].style.fontSize = newSize + "px";
                 }
             }
             saveState();
         };
-
+        
         const initializeInteractiveElement = (el) => {
             el.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -132,14 +125,8 @@ if (isPreviewPage) {
             });
             const textContent = el.querySelector('.text-content');
             if (textContent) {
-                textContent.addEventListener('dblclick', (e) => {
-                    textContent.setAttribute('contenteditable', 'true');
-                    textContent.focus();
-                });
-                textContent.addEventListener('blur', (e) => {
-                    textContent.setAttribute('contenteditable', 'false');
-                    saveState();
-                });
+                textContent.addEventListener('dblclick', () => { textContent.setAttribute('contenteditable', 'true'); textContent.focus(); });
+                textContent.addEventListener('blur', () => { textContent.setAttribute('contenteditable', 'false'); saveState(); });
             }
         };
 
@@ -161,9 +148,18 @@ if (isPreviewPage) {
         const initialPositions = { 'logo-element':{top:'5%',left:'38%',width:'24%'}, 'info-element':{top:'18%',left:'10%',width:'80%'}, 'title-element':{top:'33%',left:'10%',width:'80%'}, 'course-element':{top:'48%',left:'10%',width:'80%'}, 'to-element':{top:'60%',left:'5%',width:'45%'}, 'by-element':{top:'60%',left:'55%',width:'40%'}, 'date-element':{top:'90%',left:'10%',width:'80%'} };
         for (const id in initialPositions) { Object.assign(document.getElementById(id).style, initialPositions[id]); }
         
-        document.querySelectorAll('.interactive-element .text-content').forEach(el => {
-            const parent = el.parentElement; parent.style.height = 'auto'; parent.style.height = `${el.scrollHeight + 20}px`;
+        document.querySelectorAll('.interactive-element').forEach(el => {
+            if (el.id !== 'logo-element') {
+                const textContent = el.querySelector('.text-content');
+                if (textContent) {
+                    el.style.height = 'auto'; el.style.height = `${textContent.scrollHeight + 20}px`;
+                }
+            }
         });
+
+        const initialLogoEl = document.getElementById('logo-element');
+        const logoRect = initialLogoEl.getBoundingClientRect();
+        initialLogoEl.querySelector('.dimension-display').textContent = `${Math.round(logoRect.width)}px x ${Math.round(logoRect.height)}px`;
         
         isPreviewPage.classList.add('template-default', 'has-border');
         initializeAllElements();
@@ -171,7 +167,6 @@ if (isPreviewPage) {
 
         // --- Event Listeners ---
         document.getElementById('undo-btn').addEventListener('click', restoreState);
-
         document.getElementById('add-textbox-btn').addEventListener('click', () => {
             newTextboxCounter++;
             const newEl = document.createElement('div');
@@ -227,6 +222,10 @@ if (isPreviewPage) {
                 start: saveState,
                 move(event) {
                     Object.assign(event.target.style, { width: `${event.rect.width}px`, height: `${event.rect.height}px` });
+                    if (event.target.id === 'logo-element') {
+                        const display = event.target.querySelector('.dimension-display');
+                        if (display) { display.textContent = `${Math.round(event.rect.width)}px x ${Math.round(event.rect.height)}px`; }
+                    }
                 },
                 end: saveState
             },
