@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DU Cover Page Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Dhaka University Cover Page Generator 📝</h1>
+            <p>Fill in the details below to create your professional A4 cover page.</p>
+        </header>
+        
+        <form id="cover-form">
+            <div class="form-group">
+                <label for="title">Assignment/Report Title</label>
+                <input type="text" id="title" placeholder="e.g., A Study on Consumer Behavior" required>
+            </div>
+
+            <div class="form-group">
+                <label for="submitted-by">Submitted By</label>
+                <textarea id="submitted-by" rows="4" placeholder="Your Name&#10;ID: 123456&#10;Section: A" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="teacher-list">Submitted To</label>
+                <select id="teacher-list" required>
+                    <option value="" disabled selected>Select a faculty member...</option>
+                    </select>
+            </div>
+
+            <div class="form-group">
+                <label for="template">Choose a Design Template</label>
+                <select id="template" required>
+                    <option value="template-1" selected>Classic Professional</option>
+                    <option value="template-2">Modern Minimalist</option>
+                    <option value="template-3">Elegant Border</option>
+                    <option value="template-4">Bold Header</option>
+                    <option value="template-5">Simple Centered</option>
+                </select>
+            </div>
+
+            <button type="submit">Generate & Preview ✨</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

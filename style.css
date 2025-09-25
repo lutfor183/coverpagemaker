@@ -1,0 +1,250 @@
+/* --- Global Styles & Main Page --- */
+:root {
+    --primary-color: #003366; /* DU Blue */
+    --secondary-color: #f4f4f4;
+    --text-color: #333;
+    --border-color: #ddd;
+    --font-main: 'Poppins', sans-serif;
+    --font-serif: 'Merriweather', serif;
+    --font-slab: 'Roboto Slab', serif;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: var(--font-main);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
+}
+
+textarea {
+    resize: vertical;
+}
+
+button[type="submit"], #download-btn, .back-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button[type="submit"]:hover, #download-btn:hover {
+    background: #002244; /* Darker Blue */
+}
+
+/* --- Preview Page Styles --- */
+.preview-body {
+    display: block; /* Override flex for scrolling */
+}
+
+.controls {
+    text-align: center;
+    background: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    max-width: 210mm; /* A4 width */
+}
+
+.controls h2 {
+    margin-top: 0;
+}
+
+#download-btn {
+    margin-bottom: 10px;
+}
+
+.back-btn {
+    background-color: #6c757d;
+}
+.back-btn:hover {
+    background-color: #5a6268;
+}
+
+/* --- A4 Page & Content Styling --- */
+#a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.logo {
+    max-width: 100px;
+    margin: 0 auto 20px;
+}
+
+.university-info h2 {
+    font-size: 24px;
+    margin-top: 5px;
+    margin-bottom: 60px;
+}
+
+.university-info p {
+    font-size: 18px;
+    margin: 4px 0;
+}
+
+.title-placeholder {
+    font-size: 32px;
+    margin: auto 0;
+    font-weight: 700;
+    padding: 40px 0;
+}
+
+.submission-details {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin-top: 60px;
+    margin-bottom: auto;
+    width: 100%;
+}
+
+.submission-details h3 {
+    font-size: 16px;
+    border-bottom: 1px solid var(--text-color);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.submission-details p {
+    margin: 5px 0;
+    line-height: 1.6;
+    white-space: pre-wrap; /* To respect newlines in textarea */
+}
+
+.submitted-to, .submitted-by {
+    width: 45%;
+}
+
+.submission-date {
+    margin-top: 60px;
+}
+
+
+/* --- TEMPLATE STYLES --- */
+
+/* Template 1: Classic Professional (Default) */
+#a4-page.template-1 {
+    font-family: var(--font-serif);
+}
+#a4-page.template-1 .title-placeholder {
+    font-family: var(--font-slab);
+    color: var(--primary-color);
+}
+
+/* Template 2: Modern Minimalist */
+#a4-page.template-2 {
+    font-family: var(--font-main);
+    text-align: left;
+}
+#a4-page.template-2 .logo { margin: 0 0 40px 0; }
+#a4-page.template-2 .university-info { margin-bottom: 40px; }
+#a4-page.template-2 .title-placeholder { font-size: 40px; padding: 20px 0; }
+#a4-page.template-2 .submission-date { text-align: left; }
+
+/* Template 3: Elegant Border */
+#a4-page.template-3 {
+    border: 10px double var(--primary-color);
+    padding: 15mm; /* Adjust padding for border */
+    font-family: var(--font-serif);
+}
+
+/* Template 4: Bold Header */
+#a4-page.template-4 .content {
+    border-top: 15px solid var(--primary-color);
+    padding-top: 30px;
+}
+#a4-page.template-4 .logo { width: 80px; }
+
+/* Template 5: Simple Centered */
+#a4-page.template-5 {
+    font-family: var(--font-main);
+    justify-content: center;
+    align-items: center;
+}
+#a4-page.template-5 .content > * {
+    margin-bottom: 25px;
+}
+#a4-page.template-5 .submission-details {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+}
+#a4-page.template-5 .submitted-to,
+#a4-page.template-5 .submitted-by {
+    width: 100%;
+}

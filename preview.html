@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview & Download Cover Page</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Roboto+Slab:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="preview-body">
+
+    <div class="controls">
+        <h2>Preview Your Cover Page</h2>
+        <p>Review the generated page below. If it looks good, download it as a PDF.</p>
+        <button id="download-btn">⬇️ Download as PDF</button>
+        <a href="index.html" class="back-btn">⬅️ Go Back & Edit</a>
+    </div>
+
+    <div id="a4-page">
+        <div class="content">
+            <img src="https://i.ibb.co/6yYQY46/du-logo.png" alt="Dhaka University Logo" class="logo">
+            
+            <div class="university-info">
+                <p>Department of Marketing</p>
+                <p>Faculty of Business Studies</p>
+                <h2>University of Dhaka</h2>
+            </div>
+
+            <h1 class="title-placeholder"></h1>
+
+            <div class="submission-details">
+                <div class="submitted-to">
+                    <h3>Submitted To</h3>
+                    <p class="teacher-name-placeholder"></p>
+                    <p class="teacher-designation-placeholder"></p>
+                </div>
+                <div class="submitted-by">
+                    <h3>Submitted By</h3>
+                    <p class="submitted-by-placeholder"></p>
+                </div>
+            </div>
+
+            <div class="submission-date">
+                <p><strong>Date of Submission</strong></p>
+                <p class="date-placeholder"></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
