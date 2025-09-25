@@ -41,6 +41,9 @@ body { font-family: var(--font-main); background-color: var(--secondary-color); 
 .interactive-element.selected { border-color: var(--accent-color) !important; }
 .text-content { width: 100%; height: 100%; user-select: none; overflow: hidden; }
 .text-content:focus { outline: none; user-select: text; }
+#logo-element img { width: 100%; height: 100%; object-fit: contain; }
+.dimension-display { display: none; position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.6); color: white; text-align: center; font-size: 12px; padding: 2px 0; font-family: monospace; }
+.interactive-element.selected .dimension-display { display: block; }
 #date-element.hidden { display: none; }
 .is-printing .interactive-element { border-color: transparent !important; }
 #format-toolbar { position: absolute; display: flex; align-items: center; gap: 4px; background: #2d3748; padding: 6px; border-radius: 8px; box-shadow: var(--shadow); z-index: 1000; transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out; }
@@ -63,28 +66,3 @@ body { font-family: var(--font-main); background-color: var(--secondary-color); 
 /* --- Mobile Responsiveness --- */
 @media (max-width: 810px) { body { padding: 0; } .a4-container { padding: 10px; } }
 @media (max-width: 640px) { .container { margin: 0; border-radius: 0; } .actions { flex-direction: column; } .actions > * { width: 100%; } }
-/* ADD THESE STYLES */
-#logo-element img {
-    /* These properties ensure the image scales correctly within its box */
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Maintains aspect ratio without stretching */
-}
-
-.dimension-display {
-    display: none; /* Hidden by default */
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    text-align: center;
-    font-size: 12px;
-    padding: 2px 0;
-    font-family: monospace;
-}
-
-.interactive-element.selected .dimension-display {
-    display: block; /* Show when the element is selected */
-}
