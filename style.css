@@ -6,245 +6,70 @@
     --border-color: #ddd;
     --font-main: 'Poppins', sans-serif;
     --font-serif: 'Merriweather', serif;
-    --font-slab: 'Roboto Slab', serif;
 }
-
-body {
-    font-family: var(--font-main);
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.container {
-    background: #fff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-header h1 {
-    color: var(--primary-color);
-    margin: 0;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: var(--font-main);
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
-}
-
-textarea {
-    resize: vertical;
-}
-
-button[type="submit"], #download-btn, .back-btn {
-    width: 100%;
-    padding: 15px;
-    background: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-}
-
-button[type="submit"]:hover, #download-btn:hover {
-    background: #002244; /* Darker Blue */
-}
+body { font-family: var(--font-main); background-color: var(--secondary-color); color: var(--text-color); margin: 0; padding: 20px; box-sizing: border-box; }
+.container { background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 100%; max-width: 600px; margin: 20px auto; }
+header { text-align: center; margin-bottom: 30px; }
+header h1 { color: var(--primary-color); margin: 0; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 500; margin-bottom: 8px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 16px; font-family: var(--font-main); transition: border-color 0.3s, box-shadow 0.3s; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 5px rgba(0, 51, 102, 0.2); }
+textarea { resize: vertical; }
+button, .back-btn { width: 100%; padding: 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; font-size: 18px; font-weight: 500; cursor: pointer; transition: background-color 0.3s; text-align: center; text-decoration: none; display: inline-block; box-sizing: border-box; }
+button:hover { background: #002244; }
 
 /* --- Preview Page Styles --- */
-.preview-body {
-    display: block; /* Override flex for scrolling */
-}
-
-.controls {
-    text-align: center;
-    background: #fff;
-    padding: 20px;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    max-width: 210mm; /* A4 width */
-}
-
-.controls h2 {
-    margin-top: 0;
-}
-
-#download-btn {
-    margin-bottom: 10px;
-}
-
-.back-btn {
-    background-color: #6c757d;
-}
-.back-btn:hover {
-    background-color: #5a6268;
-}
+.preview-body { padding-top: 180px; }
+.controls { text-align: center; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); max-width: 800px; margin: 20px auto; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); width: 95%; z-index: 100; }
+.controls h2 { margin: 0 0 10px 0; }
+.controls .options { display: flex; justify-content: center; gap: 20px; margin: 15px 0; }
+.controls .option-item { display: flex; align-items: center; gap: 5px; }
+.controls .actions { display: flex; gap: 10px; }
+#undo-btn { background-color: #ffc107; color: #333; }
+#undo-btn:hover { background-color: #e0a800; }
+.back-btn { background-color: #6c757d; padding: 15px; }
+.back-btn:hover { background-color: #5a6268; }
 
 /* --- A4 Page & Content Styling --- */
 #a4-page {
+    position: relative; /* Crucial for positioning children */
     width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
+    height: 297mm;
     margin: 20px auto;
     background: white;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    text-align: center;
+    overflow: hidden; /* Hide anything dragged outside */
 }
+#a4-page.has-border { border: 10px double var(--primary-color); }
+.interactive-element {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 10px;
+    min-width: 50px;
+    min-height: 40px;
+    touch-action: none; /* Recommended for interact.js */
+    border: 1px dashed transparent; /* Show border on hover */
+}
+.interactive-element:hover:not(.editing) {
+    border-color: #007bff;
+    cursor: move;
+}
+.interactive-element.editing { border: 1px solid #007bff; }
+.interactive-element > * { height: 100%; width: 100%; }
+/* Remove default margins from elements inside interactive divs */
+.interactive-element h1, .interactive-element h2, .interactive-element p { margin: 0; }
+/* Make text and images un-draggable by default browser behavior */
+.interactive-element p, .interactive-element h1, .interactive-element h2, .interactive-element img { user-select: none; }
+.interactive-element [contenteditable="true"] { outline: 2px solid #007bff; background: rgba(0, 123, 255, 0.05); user-select: text; }
+.logo { max-width: 100%; height: auto; }
+.title-placeholder { font-size: 32px; font-weight: 700; }
+.submitted-to h3, .submitted-by h3 { border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px; }
+.submitted-by p { white-space: pre-wrap; } /* Respect newlines from textarea */
+.submission-date { text-align: center; }
+#date-element.hidden { display: none; }
 
-.logo {
-    max-width: 100px;
-    margin: 0 auto 20px;
-}
-
-.university-info h2 {
-    font-size: 24px;
-    margin-top: 5px;
-    margin-bottom: 60px;
-}
-
-.university-info p {
-    font-size: 18px;
-    margin: 4px 0;
-}
-
-.title-placeholder {
-    font-size: 32px;
-    margin: auto 0;
-    font-weight: 700;
-    padding: 40px 0;
-}
-
-.submission-details {
-    display: flex;
-    justify-content: space-between;
-    text-align: left;
-    margin-top: 60px;
-    margin-bottom: auto;
-    width: 100%;
-}
-
-.submission-details h3 {
-    font-size: 16px;
-    border-bottom: 1px solid var(--text-color);
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-}
-
-.submission-details p {
-    margin: 5px 0;
-    line-height: 1.6;
-    white-space: pre-wrap; /* To respect newlines in textarea */
-}
-
-.submitted-to, .submitted-by {
-    width: 45%;
-}
-
-.submission-date {
-    margin-top: 60px;
-}
-
-
-/* --- TEMPLATE STYLES --- */
-
-/* Template 1: Classic Professional (Default) */
-#a4-page.template-1 {
-    font-family: var(--font-serif);
-}
-#a4-page.template-1 .title-placeholder {
-    font-family: var(--font-slab);
-    color: var(--primary-color);
-}
-
-/* Template 2: Modern Minimalist */
-#a4-page.template-2 {
-    font-family: var(--font-main);
-    text-align: left;
-}
-#a4-page.template-2 .logo { margin: 0 0 40px 0; }
-#a4-page.template-2 .university-info { margin-bottom: 40px; }
-#a4-page.template-2 .title-placeholder { font-size: 40px; padding: 20px 0; }
-#a4-page.template-2 .submission-date { text-align: left; }
-
-/* Template 3: Elegant Border */
-#a4-page.template-3 {
-    border: 10px double var(--primary-color);
-    padding: 15mm; /* Adjust padding for border */
-    font-family: var(--font-serif);
-}
-
-/* Template 4: Bold Header */
-#a4-page.template-4 .content {
-    border-top: 15px solid var(--primary-color);
-    padding-top: 30px;
-}
-#a4-page.template-4 .logo { width: 80px; }
-
-/* Template 5: Simple Centered */
-#a4-page.template-5 {
-    font-family: var(--font-main);
-    justify-content: center;
-    align-items: center;
-}
-#a4-page.template-5 .content > * {
-    margin-bottom: 25px;
-}
-#a4-page.template-5 .submission-details {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 30px;
-}
-#a4-page.template-5 .submitted-to,
-#a4-page.template-5 .submitted-by {
-    width: 100%;
-}
+/* --- Hide editing artifacts during PDF generation --- */
+.is-printing .interactive-element { border-color: transparent !important; }
+.is-printing .resize-handle { display: none !important; }
