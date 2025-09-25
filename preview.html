@@ -3,46 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preview & Download Cover Page</title>
+    <title>Edit & Download Cover Page</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Roboto+Slab:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 </head>
 <body class="preview-body">
 
     <div class="controls">
-        <h2>Preview Your Cover Page</h2>
-        <p>Review the generated page below. If it looks good, download it as a PDF.</p>
-        <button id="download-btn">⬇️ Download as PDF</button>
-        <a href="index.html" class="back-btn">⬅️ Go Back & Edit</a>
+        <h2>Live Editor</h2>
+        <p>Click text to edit. Drag to move. Drag corners to resize.</p>
+        <div class="options">
+             <div class="option-item">
+                <input type="checkbox" id="toggle-border" checked>
+                <label for="toggle-border">Page Border</label>
+            </div>
+             <div class="option-item">
+                <input type="checkbox" id="toggle-date" checked>
+                <label for="toggle-date">Show Date</label>
+            </div>
+        </div>
+        <div class="actions">
+            <button id="undo-btn">↩️ Undo</button>
+            <button id="download-btn">⬇️ Download PDF</button>
+            <a href="index.html" class="back-btn">⬅️ Start Over</a>
+        </div>
     </div>
 
     <div id="a4-page">
-        <div class="content">
-            <img src="https://i.ibb.co/6yYQY46/du-logo.png" alt="Dhaka University Logo" class="logo">
-            
+        <div id="logo-element" class="interactive-element">
+             <img src="du-logo.png" alt="Dhaka University Logo" class="logo">
+        </div>
+        
+        <div id="info-element" class="interactive-element">
             <div class="university-info">
                 <p>Department of Marketing</p>
                 <p>Faculty of Business Studies</p>
                 <h2>University of Dhaka</h2>
             </div>
+        </div>
 
+        <div id="title-element" class="interactive-element">
             <h1 class="title-placeholder"></h1>
-
-            <div class="submission-details">
-                <div class="submitted-to">
-                    <h3>Submitted To</h3>
-                    <p class="teacher-name-placeholder"></p>
-                    <p class="teacher-designation-placeholder"></p>
-                </div>
-                <div class="submitted-by">
-                    <h3>Submitted By</h3>
-                    <p class="submitted-by-placeholder"></p>
-                </div>
+        </div>
+        
+        <div id="to-element" class="interactive-element">
+            <div class="submitted-to">
+                <h3>Submitted To</h3>
+                <p class="teacher-name-placeholder"></p>
+                <p class="teacher-designation-placeholder"></p>
+                <p>Department of Marketing</p>
+                <p>University of Dhaka</p>
             </div>
+        </div>
 
+        <div id="by-element" class="interactive-element">
+             <div class="submitted-by">
+                <h3>Submitted By</h3>
+                <p class="submitted-by-placeholder"></p>
+            </div>
+        </div>
+        
+        <div id="date-element" class="interactive-element">
             <div class="submission-date">
                 <p><strong>Date of Submission</strong></p>
                 <p class="date-placeholder"></p>
