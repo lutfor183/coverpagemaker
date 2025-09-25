@@ -12,10 +12,19 @@ body { font-family: var(--font-main); background-color: var(--secondary-color); 
 .form-row { display: flex; flex-wrap: wrap; gap: 20px; }
 .form-row .form-group { flex: 1; min-width: 200px; }
 .form-group label { display: block; font-weight: 500; margin-bottom: 8px; }
-.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; font-family: var(--font-main); transition: all 0.2s ease-in-out; }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 80, 158, 0.2); }
+.form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; font-family: var(--font-main); transition: all 0.2s ease-in-out; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 80, 158, 0.2); }
 .cta-button { width: 100%; padding: 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 8px; font-size: 18px; font-weight: 500; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
 .cta-button:hover { background: var(--accent-color); transform: translateY(-2px); }
+
+/* NEW: Autocomplete Styles */
+.autocomplete-container { position: relative; }
+.suggestions-container { display: none; position: absolute; border: 1px solid var(--border-color); border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: white; max-height: 200px; overflow-y: auto; box-shadow: 0 8px 10px rgba(0,0,0,0.1); }
+.suggestion-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover { background-color: #f1f1f1; }
+.suggestion-item .name { font-weight: 500; }
+.suggestion-item .designation { font-size: 0.9em; color: #666; }
 
 /* --- Editor Page (preview.html) --- */
 .preview-body { padding: 0; }
@@ -31,8 +40,8 @@ body { font-family: var(--font-main); background-color: var(--secondary-color); 
 #add-textbox-btn { background-color: #28a745; color: white; border-color: #28a745; }
 .actions > .cta-button, .actions > .back-btn { width: auto; flex-grow: 1; }
 .back-btn { background-color: #6c757d; color: white; border-color: #6c757d; }
-.a4-container { width: 100%; padding: 20px; display: flex; justify-content: center; }
-#a4-page { position: relative; width: 210mm; height: 297mm; background: white; box-shadow: var(--shadow); overflow: hidden; transform-origin: top center; transform: scale(var(--page-scale, 1)); }
+.a4-container { width: 100%; padding: 20px; overflow-x: auto; /* Allow horizontal scroll for fixed-size page */ }
+#a4-page { position: relative; width: 210mm; height: 297mm; background: white; box-shadow: var(--shadow); overflow: hidden; margin: 0 auto; /* Center the page in the scroll container */ /* REMOVED transform: scale() to make it fixed size */ }
 .course-info-placeholder { font-size: 14px; color: #555; }
 
 /* --- Interactive Elements & Formatting Toolbar --- */
@@ -64,5 +73,4 @@ body { font-family: var(--font-main); background-color: var(--secondary-color); 
 #a4-page.template-creative.has-border { outline: 2px dashed var(--accent-color); outline-offset: -7px; }
 
 /* --- Mobile Responsiveness --- */
-@media (max-width: 810px) { body { padding: 0; } .a4-container { padding: 10px; } }
 @media (max-width: 640px) { .container { margin: 0; border-radius: 0; } .actions { flex-direction: column; } .actions > * { width: 100%; } }
