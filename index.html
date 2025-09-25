@@ -40,11 +40,11 @@
                 <textarea id="submitted-by" rows="4" placeholder="Your Name&#10;ID: 123-456-789&#10;Section: A"></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="teacher-list">Submitted To</label>
-                <select id="teacher-list">
-                    <option value="" disabled selected>Select a faculty member...</option>
-                </select>
+            <div class="form-group autocomplete-container">
+                <label for="teacher-input">Submitted To</label>
+                <input type="text" id="teacher-input" placeholder="Type to search..." autocomplete="off">
+                <input type="hidden" id="teacher-data">
+                <div id="teacher-suggestions" class="suggestions-container"></div>
             </div>
 
             <button type="submit" class="cta-button">Generate & Edit Layout ✨</button>
