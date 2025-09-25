@@ -7,73 +7,50 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Roboto+Slab:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Roboto+Slab:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 </head>
 <body class="preview-body">
 
-    <div class="controls">
+    <div id="format-toolbar" class="hidden">
+        <button data-command="bold" title="Bold"><b>B</b></button>
+        <button data-command="italic" title="Italic"><i>I</i></button>
+        <button data-command="increaseFontSize" title="Increase Font Size">A+</button>
+        <button data-command="decreaseFontSize" title="Decrease Font Size">A-</button>
+        <div class="separator"></div>
+        <button data-command="align" data-value="left" title="Align Left"><svg viewBox="0 0 24 24"><path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z"/></svg></button>
+        <button data-command="align" data-value="center" title="Align Center"><svg viewBox="0 0 24 24"><path d="M7 15v2h10v-2H7zm-4 6h18v-2H3v2zm0-8h18v-2H3v2zm4-6v2h10V7H7zM3 3v2h18V3H3z"/></svg></button>
+        <button data-command="align" data-value="right" title="Align Right"><svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zM3 3v2h18V3H3z"/></svg></button>
+    </div>
+
+    <header class="controls">
         <h2>Live Editor</h2>
-        <p>Click text to edit. Drag to move. Drag corners to resize.</p>
+        <p class="instructions">Choose a template, then click an element to select and edit.</p>
         <div class="options">
-             <div class="option-item">
-                <input type="checkbox" id="toggle-border" checked>
-                <label for="toggle-border">Page Border</label>
-            </div>
-             <div class="option-item">
-                <input type="checkbox" id="toggle-date" checked>
-                <label for="toggle-date">Show Date</label>
-            </div>
+             <div class="option-item"><input type="checkbox" id="toggle-border" checked><label for="toggle-border">Page Border</label></div>
+            <div class="option-item"><label for="template-switcher">Template:</label><select id="template-switcher"><option value="template-default">Default</option><option value="template-formal">Formal</option><option value="template-modern">Modern</option><option value="template-minimal">Minimalist</option><option value="template-creative">Creative</option></select></div>
+             <div class="option-item"><input type="checkbox" id="toggle-date" checked><label for="toggle-date">Show Date</label></div>
         </div>
         <div class="actions">
-            <button id="undo-btn">↩️ Undo</button>
-            <button id="download-btn">⬇️ Download PDF</button>
-            <a href="index.html" class="back-btn">⬅️ Start Over</a>
+            <button id="add-textbox-btn" class="control-button">➕ Add Textbox</button>
+            <button id="undo-btn" class="control-button">↩️ Undo</button>
+            <button id="download-btn" class="cta-button">⬇️ Download PDF</button>
+            <a href="index.html" class="control-button back-btn">⬅️ Start Over</a>
         </div>
-    </div>
+    </header>
 
-    <div id="a4-page">
-        <div id="logo-element" class="interactive-element">
-             <img src="du-logo.png" alt="Dhaka University Logo" class="logo">
+    <main class="a4-container">
+        <div id="a4-page">
+            <div id="logo-element" class="interactive-element"><img src="du-logo.png" alt="Dhaka University Logo"></div>
+            <div id="info-element" class="interactive-element"><div class="text-content" style="text-align: center;"><p>Department of Marketing</p><p>Faculty of Business Studies</p><h2>University of Dhaka</h2></div></div>
+            <div id="title-element" class="interactive-element"><h1 class="text-content title-placeholder" style="text-align: center;"></h1></div>
+            <div id="course-element" class="interactive-element"><div class="text-content course-info-placeholder" style="text-align: center;"></div></div>
+            <div id="to-element" class="interactive-element"><div class="text-content" style="text-align: center;"><h3>Submitted To</h3><p class="teacher-name-placeholder"></p><p class="teacher-designation-placeholder"></p><p>Department of Marketing</p><p>University of Dhaka</p></div></div>
+            <div id="by-element" class="interactive-element"><div class="text-content" style="text-align: center;"><h3>Submitted By</h3><p class="submitted-by-placeholder"></p></div></div>
+            <div id="date-element" class="interactive-element"><div class="text-content" style="text-align: center;"><p><strong>Date of Submission:</strong> <span class="date-placeholder"></span></p></div></div>
         </div>
-        
-        <div id="info-element" class="interactive-element">
-            <div class="university-info">
-                <p>Department of Marketing</p>
-                <p>Faculty of Business Studies</p>
-                <h2>University of Dhaka</h2>
-            </div>
-        </div>
-
-        <div id="title-element" class="interactive-element">
-            <h1 class="title-placeholder"></h1>
-        </div>
-        
-        <div id="to-element" class="interactive-element">
-            <div class="submitted-to">
-                <h3>Submitted To</h3>
-                <p class="teacher-name-placeholder"></p>
-                <p class="teacher-designation-placeholder"></p>
-                <p>Department of Marketing</p>
-                <p>University of Dhaka</p>
-            </div>
-        </div>
-
-        <div id="by-element" class="interactive-element">
-             <div class="submitted-by">
-                <h3>Submitted By</h3>
-                <p class="submitted-by-placeholder"></p>
-            </div>
-        </div>
-        
-        <div id="date-element" class="interactive-element">
-            <div class="submission-date">
-                <p><strong>Date of Submission</strong></p>
-                <p class="date-placeholder"></p>
-            </div>
-        </div>
-    </div>
+    </main>
     
     <script src="script.js"></script>
 </body>
