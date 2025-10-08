@@ -126,6 +126,7 @@
             cursor: not-allowed;
         }
 
+        /* Autocomplete Styles */
         .autocomplete-suggestions {
             position: absolute;
             top: 100%;
@@ -154,10 +155,12 @@
             margin-left: 8px;
         }
 
+        /* Page hiding */
         .hidden {
             display: none !important;
         }
         
+        /* Template Selection Page */
         #template-page h2 {
             margin-bottom: 20px;
         }
@@ -189,29 +192,32 @@
             margin-bottom: 10px;
         }
         
+        /* --- FIX for preview distortion --- */
         #preview-container {
             background: #e0e0e0;
             padding: 20px;
-            border-radius: 5px;
-            overflow: hidden; 
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 5px;
+            overflow-x: auto; /* Adds scrollbar if needed, prevents squishing */
         }
 
+        /* A4 Page Preview Styling */
         .a4-page {
             width: var(--a4-width);
             height: var(--a4-height);
             background: white;
-            border: 1px solid #ccc;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
             transform-origin: top center;
+            transform: scale(0.3); /* Scale down for on-screen preview */
             box-sizing: border-box;
             padding: 2cm;
             color: black;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            flex-shrink: 0; /* --- FIX: Prevents the page from shrinking on small screens --- */
+            overflow: hidden; /* Important for html2canvas */
+            flex-shrink: 0; /* Prevents the page itself from shrinking */
         }
         
         .action-buttons {
@@ -231,21 +237,11 @@
             width: 100px;
             height: auto;
             margin-bottom: 30px;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
         }
 
         .cover-title { font-size: 28pt; font-weight: bold; }
-
-        .cover-course-details {
-            margin-top: 25px; 
-        }
-        .cover-course-details p {
-            font-size: 16pt;
-            font-style: italic;
-            color: #444;
-            margin: 8px 0;
-        }
+        .cover-course-name { font-size: 20pt; margin-top: 15px; }
+        .cover-course-code { font-size: 16pt; margin-top: 8px; font-style: italic; color: #444;}
         
         .info-section {
             margin-top: auto;
@@ -265,14 +261,17 @@
             margin-top: auto;
         }
 
+        /* Template 1: Centered Classic */
         .template1 { text-align: center; }
         .template1 .cover-logo { margin-left: auto; margin-right: auto; }
         .template1 .info-section { text-align: left; }
         
+        /* Template 2: Left Aligned Modern */
         .template2 { text-align: left; }
         .template2 .cover-logo { margin-left: 0; margin-right: 0; }
         .template2 .date-section { text-align: left; }
 
+        /* Template 3: Two Columns */
         .template3 { text-align: center; }
         .template3 .cover-logo { margin-left: auto; margin-right: auto; }
         .template3 .info-section {
@@ -283,6 +282,7 @@
         }
         .template3 .info-block { width: 100%; }
         
+        /* --- MOBILE FRIENDLY STYLES --- */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -295,6 +295,9 @@
             }
             .form-grid { 
                 grid-template-columns: 1fr; 
+            }
+            .a4-page { 
+                transform: scale(0.25); 
             }
             .template-options { 
                 flex-direction: column; 
@@ -367,7 +370,7 @@
                          <div class="date-group">
                             <input type="checkbox" id="use-today-date">
                             <label for="use-today-date">Use Today's Date</label>
-                         </div>
+                        </div>
                     </div>
 
                     <button type="button" id="next-btn">Create Cover Page</button>
@@ -394,7 +397,7 @@
 
             <h2 id="preview-heading" class="hidden">2. Preview & Download</h2>
             <div id="preview-container" class="hidden">
-                 </div>
+                </div>
             
             <div class="action-buttons">
                 <button type="button" id="back-btn" class="secondary">Back to Edit</button>
@@ -406,28 +409,101 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            const facultyData = [ { name: "Ashraful Islam Chowdhury", designation: "Professor" }, { name: "Dr. Md. Zakir Hossain Bhuiyan", designation: "Professor" }, { name: "Dr. Anisur Rahman", designation: "Professor" }, { name: "Dr. Md. Mizanur Rahman", designation: "Professor" }, { name: "Dr. Serajul Hoque", designation: "Professor & Chairman" }, { name: "Dr. Mubina Khondkar", designation: "Professor" }, { name: "Dr. ABM Shahidul Islam", designation: "Professor" }, { name: "Dr. Samir Kumar Sheel", designation: "Professor" }, { name: "Abu Naser Ahmed Ishtiaque", designation: "Professor" }, { name: "Dr. Md. Morshed Hasan Khan", designation: "Professor" }, { name: "Dr. Imrana Yasmin", designation: "Professor" }, { name: "Dr. Md. Moktar Ali", designation: "Professor" }, { name: "Dr. Nasrin Akter", designation: "Professor" }, { name: "Dr. Shehely Parvin", designation: "Professor" }, { name: "Dr. Mohammad Anwar Hossain", designation: "Professor" }, { name: "Dr. Rafiuddin Ahmed", designation: "Professor" }, { name: "Dr. Md. Nazmul Hossain", designation: "Professor" }, { name: "Dr. Abureza M Muzareba", designation: "Professor" }, { name: "Muhammad Intisar Alam", designation: "Associate Professor" }, { name: "Ali Mohammad Kowser", designation: "Assistant Professor" }, { name: "Md. Imrul Jobaid", designation: "Assistant Professor" }, { name: "Rucsar Jabin", designation: "Assistant Professor" }, { name: "Jannatul Fardues Airin", designation: "Lecturer" }, { name: "Dr. Razia Begum", designation: "Professor (LPR)" } ];
-            const courseData = [ { code: "MKT-112", name: "Principles of Management" }, { code: "MKT-113", name: "Microeconomics" }, { code: "MKT-114", name: "Computing and Information Systems" }, { code: "MKT-115", name: "Bangladesh Studies" }, { code: "MKT-121", name: "Macroeconomics" }, { code: "MKT-122", name: "Financial Accounting" }, { code: "MKT-123", name: "Business Mathematics – I" }, { code: "MKT-124", name: "Business Communication" }, { code: "MKT-125", name: "General Science & Environment" }, { code: "MKT-211", name: "Principles of Marketing – I" }, { code: "MKT-212", name: "Financial Management" }, { code: "MKT-213", name: "Human Resource Management" }, { code: "MKT-214", name: "Insurance and Risk Management" }, { code: "MKT-215", name: "Business Mathematics - II" }, { code: "MKT-221", name: "Principles of Marketing - II" }, { code: "MKT-222", name: "Agricultural Marketing" }, { code: "MKT-223", name: "Taxation & Auditing" }, { code: "MKT-224", name: "Business Statistics – I" }, { code: "MKT-225", name: "Fundamentals of Psychology" }, { code: "MKT-311", name: "Marketing Management" }, { code: "MKT-312", name: "Organizational Behavior" }, { code: "MKT-313", name: "Integrated Marketing Communications" }, { code: "MKT-314", name: "E- business" }, { code: "MKT-315", name: "Business Statistics – II" }, { code: "MKT-321", name: "Legal Aspects of Marketing" }, { code: "MKT-322", name: "Advertising" }, { code: "MKT-323", name: "Entrepreneurship Development" }, { code: "MKT-324", name: "Operations Management" }, { code: "MKT-325", name: "Supply Chain Management" }, { code: "MKT-411", name: "Global Marketing" }, { code: "MKT-412", name: "Product Planning and Development" }, { code: "MKT-413", name: "International Economics" }, { code: "MKT-414", name: "Corporate Governance & Social Responsibility" }, { code: "MKT-415", name: "Econometrics" }, { code: "MKT-421", name: "Brand Management" } ];
-            const courseData = [ { code: "MKT-112", name: "Principles of Management" }, { code: "MKT-113", name: "Microeconomics" }, { code: "MKT-114", name: "Computing and Information Systems" }, { code: "MKT-115", name: "Bangladesh Studies" }, { code: "MKT-121", name: "Macroeconomics" }, { code: "MKT-122", name: "Financial Accounting" }, { code: "MKT-123", name: "Business Mathematics – I" }, { code: "MKT-124", name: "Business Communication" }, { code: "MKT-125", name: "General Science & Environment" }, { code: "MKT-211", name: "Principles of Marketing – I" }, { code: "MKT-212", name: "Financial Management" }, { code: "MKT-213", name: "Human Resource Management" }, { code: "MKT-214", name: "Insurance and Risk Management" }, { code: "MKT-215", name: "Business Mathematics - II" }, { code: "MKT-221", name: "Principles of Marketing - II" }, { code: "MKT-222", name: "Agricultural Marketing" }, { code: "MKT-223", name: "Taxation & Auditing" }, { code: "MKT-224", name: "Business Statistics – I" }, { code: "MKT-225", name: "Fundamentals of Psychology" }, { code: "MKT-311", name: "Marketing Management" }, { code: "MKT-312", name: "Organizational Behavior" }, { code: "MKT-313", name: "Integrated Marketing Communications" }, { code: "MKT-314", name: "E- business" }, { code: "MKT-315", name: "Business Statistics – II" }, { code: "MKT-321", name: "Legal Aspects of Marketing" }, { code: "MKT-322", name: "Advertising" }, { code: "MKT-323", name: "Entrepreneurship Development" }, { code: "MKT-324", name: "Operations Management" }, { code: "MKT-325", name: "Supply Chain Management" }, { code: "MKT-411", name: "Global Marketing" }, { code: "MKT-412", name: "Product Planning and Development" }, { code: "MKT-413", name: "International Economics" }, { code: "MKT-414", name: "Corporate Governance & Social Responsibility" }, { code: "MKT-415", name: "Econometrics" }, { code: "MKT-422", name: "Marketing Research" }, { code: "MKT-423", name: "Selling and Sales Management" }, { code: "MKT-424", name: "Consumer Behavior" }, { code: "MKT-415", name: "Services Marketing" }, { code: "MKT-421", name: "Brand Management" } ];
+            // --- DATA ---
+            const facultyData = [
+                { name: "Ashraful Islam Chowdhury", designation: "Professor" },
+                { name: "Dr. Md. Zakir Hossain Bhuiyan", designation: "Professor" },
+                { name: "Dr. Anisur Rahman", designation: "Professor" },
+                { name: "Dr. Md. Mizanur Rahman", designation: "Professor" },
+                { name: "Dr. Serajul Hoque", designation: "Professor & Chairman" },
+                { name: "Dr. Mubina Khondkar", designation: "Professor" },
+                { name: "Dr. ABM Shahidul Islam", designation: "Professor" },
+                { name: "Dr. Samir Kumar Sheel", designation: "Professor" },
+                { name: "Abu Naser Ahmed Ishtiaque", designation: "Professor" },
+                { name: "Dr. Md. Morshed Hasan Khan", designation: "Professor" },
+                { name: "Dr. Imrana Yasmin", designation: "Professor" },
+                { name: "Dr. Md. Moktar Ali", designation: "Professor" },
+                { name: "Dr. Nasrin Akter", designation: "Professor" },
+                { name: "Dr. Shehely Parvin", designation: "Professor" },
+                { name: "Dr. Mohammad Anwar Hossain", designation: "Professor" },
+                { name: "Dr. Rafiuddin Ahmed", designation: "Professor" },
+                { name: "Dr. Md. Nazmul Hossain", designation: "Professor" },
+                { name: "Dr. Abureza M Muzareba", designation: "Professor" },
+                { name: "Muhammad Intisar Alam", designation: "Associate Professor" },
+                { name: "Ali Mohammad Kowser", designation: "Assistant Professor" },
+                { name: "Md. Imrul Jobaid", designation: "Assistant Professor" },
+                { name: "Rucsar Jabin", designation: "Assistant Professor" },
+                { name: "Jannatul Fardues Airin", designation: "Lecturer" },
+                { name: "Dr. Razia Begum", designation: "Professor (LPR)" }
+            ];
+
+            const courseData = [
+                { code: "MKT-112", name: "Principles of Management" },
+                { code: "MKT-113", name: "Microeconomics" },
+                { code: "MKT-114", name: "Computing and Information Systems" },
+                { code: "MKT-115", name: "Bangladesh Studies" },
+                { code: "MKT-121", name: "Macroeconomics" },
+                { code: "MKT-122", name: "Financial Accounting" },
+                { code: "MKT-123", name: "Business Mathematics – I" },
+                { code: "MKT-124", name: "Business Communication" },
+                { code: "MKT-125", name: "General Science & Environment" },
+                { code: "MKT-211", name: "Principles of Marketing – I" },
+                { code: "MKT-212", name: "Financial Management" },
+                { code: "MKT-213", name: "Human Resource Management" },
+                { code: "MKT-214", name: "Insurance and Risk Management" },
+                { code: "MKT-215", name: "Business Mathematics - II" },
+                { code: "MKT-221", name: "Principles of Marketing - II" },
+                { code: "MKT-222", name: "Agricultural Marketing" },
+                { code: "MKT-223", name: "Taxation & Auditing" },
+                { code: "MKT-224", name: "Business Statistics – I" },
+                { code: "MKT-225", name: "Fundamentals of Psychology" },
+                { code: "MKT-311", name: "Marketing Management" },
+                { code: "MKT-312", name: "Organizational Behavior" },
+                { code: "MKT-313", name: "Integrated Marketing Communications" },
+                { code: "MKT-314", name: "E- business" },
+                { code: "MKT-315", name: "Business Statistics – II" },
+                { code: "MKT-321", name: "Legal Aspects of Marketing" },
+                { code: "MKT-322", name: "Advertising" },
+                { code: "MKT-323", name: "Entrepreneurship Development" },
+                { code: "MKT-324", name: "Operations Management" },
+                { code: "MKT-325", name: "Supply Chain Management" },
+                { code: "MKT-411", name: "Global Marketing" },
+                { code: "MKT-412", name: "Product Planning and Development" },
+                { code: "MKT-413", name: "International Economics" },
+                { code: "MKT-414", name: "Corporate Governance & Social Responsibility" },
+                { code: "MKT-415", name: "Econometrics" },
+                { code: "MKT-421", name: "Brand Management" }
+                { code: "MKT-422", name: "Marketing Research" },
+                { code: "MKT-423", name: "Selling and Sales Management" },
+                { code: "MKT-424", name: "Consumer Behavior" }
+                { code: "MKT-425", name: "Services Marketing" }
+            ];
             
+            // --- DOM ELEMENTS ---
             const inputPage = document.getElementById('input-page');
             const templatePage = document.getElementById('template-page');
             const form = document.getElementById('cover-form');
             const nextBtn = document.getElementById('next-btn');
             const backBtn = document.getElementById('back-btn');
             const downloadBtn = document.getElementById('download-btn');
+
             const courseNameInput = document.getElementById('courseName');
             const courseCodeInput = document.getElementById('courseCode');
             const courseSuggestionsContainer = document.getElementById('course-suggestions');
+
             const teacherNameInput = document.getElementById('teacherName');
             const teacherSuggestionsContainer = document.getElementById('teacher-suggestions');
+            
             const dateInput = document.getElementById('submissionDate');
             const useTodayCheckbox = document.getElementById('use-today-date');
             const previewContainer = document.getElementById('preview-container');
             const previewHeading = document.getElementById('preview-heading');
+            
+            // --- GLOBAL STATE ---
             let coverPageData = {};
             let selectedTeacher = null;
 
+            // --- LOCAL STORAGE (SUPPLEMENTARY FEATURE) ---
             const loadStudentInfo = () => {
                 document.getElementById('studentName').value = localStorage.getItem('studentName') || '';
                 document.getElementById('studentId').value = localStorage.getItem('studentId') || '';
@@ -442,13 +518,16 @@
                 localStorage.setItem('studentBatch', document.getElementById('studentBatch').value);
             };
 
+            // --- GENERIC AUTOCOMPLETE FUNCTION ---
             function setupAutocomplete(inputEl, suggestionsEl, data, displayField, onSelect) {
                 inputEl.addEventListener('input', () => {
                     const query = inputEl.value.toLowerCase();
                     suggestionsEl.innerHTML = '';
-                    if (onSelect) onSelect(null);
+                    if (onSelect) onSelect(null); // Reset selection
                     if (query.length < 2) return;
+
                     const filtered = data.filter(item => item[displayField].toLowerCase().includes(query));
+                    
                     filtered.forEach(item => {
                         const div = document.createElement('div');
                         div.className = 'suggestion-item';
@@ -463,18 +542,28 @@
                 });
             }
             
+            // Setup for Courses
             setupAutocomplete(courseNameInput, courseSuggestionsContainer, courseData, 'name', (selectedCourse) => {
-                if (selectedCourse) { courseCodeInput.value = selectedCourse.code; }
+                if (selectedCourse) {
+                    courseCodeInput.value = selectedCourse.code;
+                }
             });
+
+            // Setup for Teachers
             setupAutocomplete(teacherNameInput, teacherSuggestionsContainer, facultyData, 'name', (selected) => {
                 selectedTeacher = selected;
             });
             
             document.addEventListener('click', (e) => {
-                if (!teacherNameInput.contains(e.target)) { teacherSuggestionsContainer.innerHTML = ''; }
-                if (!courseNameInput.contains(e.target)) { courseSuggestionsContainer.innerHTML = ''; }
+                if (!teacherNameInput.contains(e.target)) {
+                    teacherSuggestionsContainer.innerHTML = '';
+                }
+                if (!courseNameInput.contains(e.target)) {
+                    courseSuggestionsContainer.innerHTML = '';
+                }
             });
 
+            // --- DATE LOGIC ---
             useTodayCheckbox.addEventListener('change', () => {
                 if (useTodayCheckbox.checked) {
                     const today = new Date();
@@ -488,21 +577,54 @@
                 }
             });
 
+            // --- PAGE NAVIGATION & DATA HANDLING ---
             nextBtn.addEventListener('click', () => {
                 if (!selectedTeacher && teacherNameInput.value) {
                     const exactMatch = facultyData.find(f => f.name.toLowerCase() === teacherNameInput.value.toLowerCase().trim());
                     if (exactMatch) selectedTeacher = exactMatch;
                 }
+                
                 let isValid = true;
                 form.querySelectorAll('input[required]').forEach(input => {
-                    if (!input.value) { input.classList.add('error'); isValid = false; } else { input.classList.remove('error'); }
+                    if (!input.value) {
+                        input.classList.add('error');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('error');
+                    }
                 });
-                if (!selectedTeacher) { teacherNameInput.classList.add('error'); isValid = false; } else { teacherNameInput.classList.remove('error'); }
-                if (!isValid) { alert('Please fill all required fields and select a valid teacher.'); return; }
+
+                if (!selectedTeacher) {
+                    teacherNameInput.classList.add('error');
+                    isValid = false;
+                } else {
+                     teacherNameInput.classList.remove('error');
+                }
+
+                if (!isValid) {
+                    alert('Please fill all required fields and select a valid teacher.');
+                    return;
+                }
+                
                 saveStudentInfo();
+
                 const dateValue = dateInput.value;
-                const submissionDate = dateValue ? new Date(dateValue + 'T00:00:00').toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A';
-                coverPageData = { title: document.getElementById('title').value, courseName: document.getElementById('courseName').value, courseCode: document.getElementById('courseCode').value, teacher: selectedTeacher, studentName: document.getElementById('studentName').value, studentId: document.getElementById('studentId').value, studentSection: document.getElementById('studentSection').value, studentBatch: document.getElementById('studentBatch').value, submissionDate: submissionDate };
+                const submissionDate = dateValue 
+                    ? new Date(dateValue + 'T00:00:00').toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                    : 'N/A';
+
+                coverPageData = {
+                    title: document.getElementById('title').value,
+                    courseName: document.getElementById('courseName').value,
+                    courseCode: document.getElementById('courseCode').value,
+                    teacher: selectedTeacher,
+                    studentName: document.getElementById('studentName').value,
+                    studentId: document.getElementById('studentId').value,
+                    studentSection: document.getElementById('studentSection').value,
+                    studentBatch: document.getElementById('studentBatch').value,
+                    submissionDate: submissionDate
+                };
+
                 inputPage.classList.add('hidden');
                 templatePage.classList.remove('hidden');
             });
@@ -516,6 +638,7 @@
                 document.querySelectorAll('.template-choice').forEach(tc => tc.classList.remove('selected'));
             });
 
+            // --- TEMPLATE RENDERING ---
             document.querySelectorAll('.template-choice').forEach(choice => {
                 choice.addEventListener('click', () => {
                     document.querySelectorAll('.template-choice').forEach(tc => tc.classList.remove('selected'));
@@ -525,33 +648,34 @@
                 });
             });
 
-            const adjustPreviewScale = () => {
-                const page = previewContainer.querySelector('.a4-page');
-                if (!page) return;
-                page.style.transform = 'scale(1)';
-                const containerWidth = previewContainer.clientWidth;
-                const pageWidth = page.offsetWidth;
-                const scale = (containerWidth / pageWidth) * 0.95;
-                page.style.transform = `scale(${scale})`;
-            };
-            
-            const debounce = (func, delay) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), delay); }; };
-            window.addEventListener('resize', debounce(adjustPreviewScale, 150));
-
             const renderTemplate = (templateId) => {
                 const { title, courseName, courseCode, teacher, studentName, studentId, studentSection, studentBatch, submissionDate } = coverPageData;
-                const submittedToHtml = `<h3>Submitted To</h3><p><b>${teacher.name}</b></p><p>${teacher.designation}</p><p>Department of Marketing</p><p>Faculty of Business Studies</p><p>University of Dhaka</p>`;
-                const submittedByHtml = `<h3>Submitted By</h3><p><b>${studentName}</b></p><p>ID: ${studentId}</p><p>Section: ${studentSection}</p><p>Batch: ${studentBatch}</p><p>Department of Marketing</p>`;
+                
+                const submittedToHtml = `
+                    <h3>Submitted To</h3>
+                    <p><b>${teacher.name}</b></p>
+                    <p>${teacher.designation}</p>
+                    <p>Department of Marketing</p>
+                    <p>Faculty of Business Studies</p>
+                    <p>University of Dhaka</p>
+                `;
+                
+                const submittedByHtml = `
+                    <h3>Submitted By</h3>
+                    <p><b>${studentName}</b></p>
+                    <p>ID: ${studentId}</p>
+                    <p>Section: ${studentSection}</p>
+                    <p>Batch: ${studentBatch}</p>
+                    <p>Department of Marketing</p>
+                `;
 
                 const templateHtml = `
                     <div class="a4-page template${templateId}">
                         <img src="img/du.png" class="cover-logo" alt="University of Dhaka Logo">
                         <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
                             <h1 class="cover-title">${title}</h1>
-                            <div class="cover-course-details">
-                                 <p>Course Name: ${courseName}</p>
-                                 <p>Course Code: ${courseCode}</p>
-                            </div>
+                            <h2 class="cover-course-name">${courseName}</h2>
+                            <p class="cover-course-code">Course Code: ${courseCode}</p>
                         </div>
                         <div class="info-section">
                             <div class="info-block">${submittedToHtml}</div>
@@ -568,19 +692,26 @@
                 previewContainer.classList.remove('hidden');
                 previewHeading.classList.remove('hidden');
                 downloadBtn.classList.remove('hidden');
-                setTimeout(adjustPreviewScale, 50); 
             };
 
+            // --- JPG DOWNLOAD LOGIC ---
             downloadBtn.addEventListener('click', () => {
                 const pageToRender = document.querySelector('.a4-page');
                 if (!pageToRender) return;
+
                 downloadBtn.textContent = 'Generating...';
                 downloadBtn.disabled = true;
-                html2canvas(pageToRender, { scale: 300 / 96, logging: false, useCORS: true }).then(canvas => {
+
+                html2canvas(pageToRender, {
+                    scale: 300 / 96,
+                    logging: false,
+                    useCORS: true 
+                }).then(canvas => {
                     const link = document.createElement('a');
                     link.download = `cover-page-${coverPageData.courseCode || 'assignment'}.jpg`;
                     link.href = canvas.toDataURL('image/jpeg', 0.95);
                     link.click();
+                    
                     downloadBtn.textContent = 'Download as JPG (300 PPI)';
                     downloadBtn.disabled = false;
                 }).catch(err => {
@@ -591,7 +722,9 @@
                 });
             });
 
+            // --- INITIALIZATION ---
             loadStudentInfo();
+
         });
     </script>
 </body>
