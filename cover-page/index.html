@@ -16,7 +16,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            /* CHANGED: Switched to a universal font for cross-browser consistency */
+            font-family: 'Times New Roman', Times, serif;
             background-color: var(--secondary-color);
             color: var(--font-color);
             margin: 0;
@@ -75,6 +76,8 @@
             font-size: 1em;
             width: 100%;
             box-sizing: border-box;
+            /* Added font-family inheritance for consistency */
+            font-family: inherit; 
         }
         
         input:focus {
@@ -109,6 +112,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+             /* Added font-family inheritance for consistency */
+            font-family: inherit;
         }
 
         button:hover {
@@ -192,7 +197,6 @@
             margin-bottom: 10px;
         }
         
-        /* --- FIX for preview distortion --- */
         #preview-container {
             background: #e0e0e0;
             padding: 20px;
@@ -200,7 +204,7 @@
             justify-content: center;
             align-items: center;
             border-radius: 5px;
-            overflow-x: auto; /* Adds scrollbar if needed, prevents squishing */
+            overflow-x: auto; 
         }
 
         /* A4 Page Preview Styling */
@@ -216,8 +220,8 @@
             color: black;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Important for html2canvas */
-            flex-shrink: 0; /* Prevents the page itself from shrinking */
+            overflow: hidden; 
+            flex-shrink: 0; 
         }
         
         .action-buttons {
@@ -282,7 +286,6 @@
         }
         .template3 .info-block { width: 100%; }
         
-        /* --- MOBILE FRIENDLY STYLES --- */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -382,15 +385,15 @@
             <h2>1. Choose a Template</h2>
             <div class="template-options">
                 <div class="template-choice" data-template="1">
-                    <img src="img/template1.svg" alt="Centered Template Icon">
+                    <img src="https://raw.githubusercontent.com/user-gemini/data/main/svggen/template1.svg" alt="Centered Template Icon">
                     <strong>Classic Centered</strong>
                 </div>
                 <div class="template-choice" data-template="2">
-                     <img src="img/template2.svg" alt="Left Aligned Template Icon">
+                     <img src="https://raw.githubusercontent.com/user-gemini/data/main/svggen/template2.svg" alt="Left Aligned Template Icon">
                     <strong>Modern Left</strong>
                 </div>
                 <div class="template-choice" data-template="3">
-                    <img src="img/template3.svg" alt="Two Column Template Icon">
+                    <img src="https://raw.githubusercontent.com/user-gemini/data/main/svggen/template3.svg" alt="Two Column Template Icon">
                     <strong>Structured Columns</strong>
                 </div>
             </div>
@@ -579,7 +582,6 @@
 
         // --- PAGE NAVIGATION & DATA HANDLING ---
         nextBtn.addEventListener('click', () => {
-            // Try to find an exact match for a typed-in teacher name to get their designation
             if (!selectedTeacher && teacherNameInput.value) {
                 const exactMatch = facultyData.find(f => f.name.toLowerCase() === teacherNameInput.value.toLowerCase().trim());
                 if (exactMatch) selectedTeacher = exactMatch;
@@ -595,8 +597,6 @@
                 }
             });
 
-            // The specific teacher validation has been removed.
-
             if (!isValid) {
                 alert('Please fill all required fields.');
                 return;
@@ -604,12 +604,9 @@
             
             saveStudentInfo();
 
-            // Prepare the teacher data object.
-            // If a teacher was selected or matched, use that object.
-            // Otherwise, create a new object with the typed name and an empty designation.
             const finalTeacherData = selectedTeacher ? selectedTeacher : {
                 name: teacherNameInput.value,
-                designation: "" // Use a blank designation for custom names
+                designation: "" 
             };
 
             const dateValue = dateInput.value;
@@ -621,7 +618,7 @@
                 title: document.getElementById('title').value,
                 courseName: document.getElementById('courseName').value,
                 courseCode: document.getElementById('courseCode').value,
-                teacher: finalTeacherData, // Use the flexible teacher data object
+                teacher: finalTeacherData,
                 studentName: document.getElementById('studentName').value,
                 studentId: document.getElementById('studentId').value,
                 studentSection: document.getElementById('studentSection').value,
@@ -677,8 +674,8 @@
                 <div class="a4-page template${templateId}">
                     <img src="img/du.png" class="cover-logo" alt="University of Dhaka Logo">
                     <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
-                        <h1 class="cover-title">${title}</h1>
-                        <h2 class="cover-course-name">${courseName}</h2>
+                        <h2 class="cover-course-name">${title}</h2>
+                        <p class="cover-course-code">Course Name: ${courseName}</p>
                         <p class="cover-course-code">Course Code: ${courseCode}</p>
                     </div>
                     <div class="info-section">
@@ -698,7 +695,7 @@
             downloadBtn.classList.remove('hidden');
         };
 
-        // --- JPG DOWNLOAD LOGIC ---
+// --- JPG DOWNLOAD LOGIC (MODIFIED FOR MOBILE) ---
         downloadBtn.addEventListener('click', () => {
             const pageToRender = document.querySelector('.a4-page');
             if (!pageToRender) return;
@@ -706,24 +703,42 @@
             downloadBtn.textContent = 'Generating...';
             downloadBtn.disabled = true;
 
-            html2canvas(pageToRender, {
-                scale: 300 / 96,
-                logging: false,
-                useCORS: true 
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `cover-page-${coverPageData.courseCode || 'assignment'}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg', 0.95);
-                link.click();
-                
-                downloadBtn.textContent = 'Download as JPG (300 PPI)';
-                downloadBtn.disabled = false;
-            }).catch(err => {
-                console.error("Image generation failed:", err);
-                alert("Could not generate the image. Please ensure you are running this from a local server (see instructions) and the logo file at 'img/du.png' is accessible.");
-                downloadBtn.textContent = 'Download as JPG (300 PPI)';
-                downloadBtn.disabled = false;
-            });
+            // 1. Determine the appropriate scale based on device width
+            const isMobile = window.innerWidth < 768;
+            const imageScale = isMobile ? 2 : 4; // Use scale 2 for mobile, 4 for desktop
+
+            // Create a clone of the element to render
+            const clone = pageToRender.cloneNode(true);
+
+            // Style the clone for clean capture
+            clone.style.transform = 'none';
+            clone.style.boxShadow = 'none';
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            clone.style.top = '0px';
+
+            document.body.appendChild(clone);
+
+            // Give the browser a tiny moment to render the off-screen clone
+            setTimeout(() => {
+                html2canvas(clone, {
+                    scale: imageScale, // Use the adaptive scale
+                    logging: false,
+                    useCORS: true
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `cover-page-${coverPageData.courseCode || 'assignment'}.jpg`;
+                    link.href = canvas.toDataURL('image/jpeg', 0.92); // Slightly optimized quality
+                    link.click();
+                }).catch(err => {
+                    console.error("Image generation failed:", err);
+                    alert("Could not generate the image. Please try again.");
+                }).finally(() => {
+                    document.body.removeChild(clone);
+                    downloadBtn.textContent = 'Download as JPG (300 PPI)';
+                    downloadBtn.disabled = false;
+                });
+            }, 100); // A 100ms delay helps ensure rendering is complete
         });
 
         // --- INITIALIZATION ---
@@ -731,3 +746,5 @@
 
     });
 </script>
+</body>
+</html>
