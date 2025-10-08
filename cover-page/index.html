@@ -554,8 +554,6 @@
             selectedTeacher = selected;
         });
         
-        // --- FIX IS HERE ---
-        // This corrected listener checks if the click is outside BOTH the input and the suggestions box.
         document.addEventListener('click', (e) => {
             if (!teacherNameInput.contains(e.target) && !teacherSuggestionsContainer.contains(e.target)) {
                 teacherSuggestionsContainer.innerHTML = '';
@@ -581,6 +579,7 @@
 
         // --- PAGE NAVIGATION & DATA HANDLING ---
         nextBtn.addEventListener('click', () => {
+            // Try to find an exact match for a typed-in teacher name to get their designation
             if (!selectedTeacher && teacherNameInput.value) {
                 const exactMatch = facultyData.find(f => f.name.toLowerCase() === teacherNameInput.value.toLowerCase().trim());
                 if (exactMatch) selectedTeacher = exactMatch;
@@ -596,14 +595,22 @@
                 }
             });
 
-            if (!selectedTeacher) {
-                teacherNameInput.classList.add('error');
-                isValid = false;
-            } else {
-                 teacherNameInput.classList.remove('error');
-            }
+            // The specific teacher validation has been removed.
 
+            if (!isValid) {
+                alert('Please fill all required fields.');
+                return;
+            }
+            
             saveStudentInfo();
+
+            // Prepare the teacher data object.
+            // If a teacher was selected or matched, use that object.
+            // Otherwise, create a new object with the typed name and an empty designation.
+            const finalTeacherData = selectedTeacher ? selectedTeacher : {
+                name: teacherNameInput.value,
+                designation: "" // Use a blank designation for custom names
+            };
 
             const dateValue = dateInput.value;
             const submissionDate = dateValue 
@@ -614,7 +621,7 @@
                 title: document.getElementById('title').value,
                 courseName: document.getElementById('courseName').value,
                 courseCode: document.getElementById('courseCode').value,
-                teacher: selectedTeacher,
+                teacher: finalTeacherData, // Use the flexible teacher data object
                 studentName: document.getElementById('studentName').value,
                 studentId: document.getElementById('studentId').value,
                 studentSection: document.getElementById('studentSection').value,
@@ -670,8 +677,8 @@
                 <div class="a4-page template${templateId}">
                     <img src="img/du.png" class="cover-logo" alt="University of Dhaka Logo">
                     <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
-                        <h2 class="cover-course-name">${title}</h2>
-                        <p class="cover-course-code">Course Name: ${courseName}</p>
+                        <h1 class="cover-title">${title}</h1>
+                        <h2 class="cover-course-name">${courseName}</h2>
                         <p class="cover-course-code">Course Code: ${courseCode}</p>
                     </div>
                     <div class="info-section">
